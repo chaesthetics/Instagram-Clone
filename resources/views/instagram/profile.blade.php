@@ -2,6 +2,22 @@
 @section('content')
 <div class="w-full min-w-[100px] overflow-x-hidden overflow-y-hidden no-scrollbar">
     <div class="w-[900px] ml-auto mr-auto overflow-x-hidden overflow-y-hidden no-scrollbar">
+    @if(session('successupdate'))
+        <div class="absolute right-5 top-3">   
+            <div id="toast-warning" class="flex border-l-3 border-green-700 items-center w-full h-12 max-w-xs p-4 text-gray-500 bg-green-200 rounded-md shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-700 rounded-lg dark:bg-orange-700 dark:text-orange-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"> <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/> </svg>
+                </div>
+                <div class="ml-1 text-xs font-semibold text-green-700"> Updated successfully </div>
+                <button type="button" class="ml-2 -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-red-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-warning" aria-label="Close">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>            
+        </div>
+    @endif
         <div class="card-header flex items-center justify-center justify-between ml-10 mt-8 mr-auto w-9/12 overflow-x-hidden overflow-y-hidden no-scrollbar">
             <div class="profilepicture">
                 @if(Auth::user()->avatar)
@@ -59,7 +75,13 @@
         <div class="grid grid-cols-3 gap-1">
         @foreach($posts->reverse() as $item)
             <button class="relative group outline-none z-20" data-modal-target="staticModal{{$item->id}}" data-modal-toggle="staticModal{{$item->id}}">
-                <div class=""><img class="group-hover:brightness-50 duration-300 object-cover h-[300px] w-[400px]" src="{{ $item->image }}"></div>
+                <div class="">
+                    @if(pathinfo($item->image, PATHINFO_EXTENSION) == "mp4")
+                        <video class="group-hover:brightness-50 duration-300 object-cover h-[300px] w-[400px]"><source src="{{ $item->image}}" type="video/mp4"></video>  
+                    @else       
+                        <img class="group-hover:brightness-50 duration-300 object-cover h-[300px] w-[400px]" src="{{ $item->image }}">
+                    @endif
+            </div>
                 <div class="absolute flex w-2/4 justify-between items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white flex opacity-0 group-hover:opacity-100 duration-300 space-x-1">
                     <div class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill text-white" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/> </svg>
@@ -76,7 +98,11 @@
 
 <div id="staticModal{{$item->id}}" data-modal-backdrop="dynamic" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 rounded-xl hidden w-full p-4 overflow-x-hidden overflow-y-hidden md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="staticModalPic{{$item->id}} rounded-xl relative flex w-10/12 max-w-10/12 justify-center">
-        <img src="{{ $item->image }}" class="max-h-[640px] h-sm max-w-[700px] w-auto">
+        @if(pathinfo($item->image, PATHINFO_EXTENSION) == "mp4")
+            <video class="max-h-[640px] h-sm max-w-[700px] w-auto" controls><source src="{{ $item->image }}" type="video/mp4"></video>  
+        @else      
+            <img src="{{ $item->image }}" class="max-h-[640px] h-sm max-w-[700px] w-auto">
+        @endif
         <div class="max-h-[640px] h-auto w-[470px] bg-white flex flex-col justify-between h-auto z-20 rounded-r-md">
             <div class=" pt-3 pl-5 pr-5 pb-3">
                 <div class="flex justify-between">
@@ -124,7 +150,11 @@
                                     {!! csrf_field() !!}
                                 <h3 class="mb-5 text-lg font-semibold text-gray-900 dark:text-gray-400">Edit Info</h3>
                                 <div class="flex pb-4">
-                                    <img src="{{ $item->image }}" class="w-1/2 h-auto">
+                                    @if(pathinfo($item->image, PATHINFO_EXTENSION) == "mp4")
+                                        <video class="w-1/2 h-auto max-h-[600px]"><source src="{{ $item->image}}" type="video/mp4"></video>  
+                                    @else       
+                                        <img src="{{ $item->image }}" class="w-1/2 h-auto max-h-[600px]">
+                                    @endif
                                     <div class="w-full h-auto border pt-5 pb-5 pl-5 pr-5 border-gray-300">
                                         <div class="flex items-center space-x-3 text-sm font-semibold">
                                         @if($item->user->avatar)

@@ -45,6 +45,39 @@
             
         </aside>
         <div class="grid col-span-5 w-full">
+                @if($errors->all())
+                <div class="absolute right-5 top-3">   
+                    <div id="toast-warning" class="flex border-l-3 border-red-700 items-center w-full h-12 max-w-xs p-4 text-gray-500 bg-red-200 rounded-md shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+                        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-700 rounded-lg dark:bg-orange-700 dark:text-orange-200">
+                        <svg  xmlns="http://www.w3.org/2000/svg" font-weight="bold" width="20" height="20" fill="currentColor" class="bi bi-info-circle font-bold" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/> </svg>
+                            <span class="sr-only">Warning icon</span>
+                        </div>
+                        <div class="ml-1 text-xs font-semibold text-red-700">Update failed</div>
+                        <button type="button" class="ml-2 -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-red-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-warning" aria-label="Close">
+                            <span class="sr-only">Close</span>
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                @endif
+                @if(session('passUpdateSuccess'))
+                <div class="absolute right-5 top-3">   
+                    <div id="toast-warning" class="flex border-l-3 border-green-700 items-center w-full h-12 max-w-xs p-4 text-gray-500 bg-green-200 rounded-md shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+                        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-700 rounded-lg dark:bg-orange-700 dark:text-orange-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"> <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/> </svg>
+                        </div>
+                        <div class="ml-1 text-xs font-semibold text-green-700"> Password updated </div>
+                        <button type="button" class="ml-2 -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-red-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-warning" aria-label="Close">
+                            <span class="sr-only">Close</span>
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                        </button>
+                    </div>            
+                </div>
+                @endif
             <div class="w-11/12 ml-auto mr-auto grid grid-cols-4 mt-3 h-3/5">
                     <div class="col-span-1 flex justify-end">
                     <form method="post" action="{{ url('passwordpost') }}">
@@ -61,20 +94,29 @@
                     <div class="col-span-1 text-md font-semibold flex justify-end">
                         <p>Old password</p>
                     </div>
-                    <div class="col-span-3 flex ml-10">
+                    <div class="col-span-3 ml-10">
                         <input type="password" name="oldpassword" class="text-sm h-10 border-gray-300 w-10/12 focus:ring-0 focus:ring-offset-0 rounded-md bg-slate-50">
+                        @error('oldpassword')       
+                        <div class="alert alert-danger text-red-700 font-semibold text-xs">{{ $message }}</div>    
+                        @enderror
                     </div>
                     <div class="col-span-1 text-md font-semibold flex justify-end">
                         <p>New password</p>
                     </div>
-                    <div class="col-span-3 flex ml-10">
+                    <div class="col-span-3 ml-10">
                         <input type="password" name="newpassword" class="text-sm h-10 border-gray-300 w-10/12 focus:ring-0 focus:ring-offset-0 rounded-md bg-slate-50">
+                        @error('newpassword')       
+                        <div class="alert alert-danger text-red-700 font-semibold text-xs">{{ $message }}</div>    
+                        @enderror
                     </div>
                     <div class="col-span-1 text-md font-semibold flex justify-end">
                         <p class="">Confirm new <br>password</p>
                     </div>
-                    <div class="col-span-3 flex ml-10">
+                    <div class="col-span-3 ml-10">
                         <input type="password" name="confirmpassword" class="text-sm h-10 border-gray-300 w-10/12 focus:ring-0 focus:ring-offset-0 rounded-md bg-slate-50">
+                        @error('confirmpassword')       
+                        <div class="alert alert-danger text-red-700 font-semibold text-xs">{{ $message }}</div>    
+                        @enderror
                     </div>
                     <div class="col-span-1 text-md font-semibold flex justify-end">
                     </div>

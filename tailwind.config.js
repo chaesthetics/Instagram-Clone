@@ -8,6 +8,7 @@ module.exports = {
   ],
   theme: {
     extend: {
+
       borderWidth: {
         DEFAULT: '1px',
         '0': '0',
@@ -18,7 +19,6 @@ module.exports = {
         '8': '8px',
       }
     },
-    
   },
   plugins: [
     require('flowbite/plugin')

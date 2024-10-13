@@ -59,7 +59,13 @@
         <div class="grid grid-cols-3 gap-1">
         @foreach($posts->reverse() as $item)
             <button class="relative group outline-none z-20" data-modal-target="staticModal{{$item->id}}" data-modal-toggle="staticModal{{$item->id}}">
-                <div class=""><img class="group-hover:brightness-50 duration-300 object-cover h-[300px] w-[400px]" src="{{ $item->image }}"></div>
+                <div class="">
+                    @if(pathinfo($item->image, PATHINFO_EXTENSION) == "mp4")
+                        <video class="group-hover:brightness-50 duration-300 object-cover h-[300px] w-[400px]"><source src="{{ $item->image }}" type="video/mp4"></video>  
+                    @else      
+                        <img class="group-hover:brightness-50 duration-300 object-cover h-[300px] w-[400px]" src="{{ $item->image }}">
+                    @endif
+                </div>
                 <div class="absolute flex w-2/4 justify-between items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white flex opacity-0 group-hover:opacity-100 duration-300 space-x-1">
                     <div class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill text-white" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/> </svg>
@@ -76,7 +82,11 @@
 
 <div id="staticModal{{$item->id}}" data-modal-backdrop="dynamic" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 rounded-xl hidden w-full p-4 overflow-x-hidden overflow-y-hidden md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="staticModalPic{{$item->id}} rounded-xl relative flex w-10/12 max-w-10/12 justify-center">
-        <img src="{{ $item->image }}" class="max-h-[640px] h-sm max-w-[700px] w-auto">
+        @if(pathinfo($item->image, PATHINFO_EXTENSION) == "mp4")
+            <video class="max-h-[640px] h-sm max-w-[700px] w-auto {{ $item->id}}" controls><source src="{{ $item->image }}" type="video/mp4"></video>  
+        @else      
+            <img src="{{ $item->image }}" class="max-h-[640px] h-sm max-w-[700px] w-auto ">
+        @endif
         <div class="max-h-[640px] h-auto w-[470px] bg-white flex flex-col justify-between h-auto z-20 rounded-r-md">
             <div class=" pt-3 pl-5 pr-5 pb-3">
                 <div class="flex justify-between">
